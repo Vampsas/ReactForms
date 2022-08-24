@@ -1,26 +1,45 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, {useState} from 'react';
+import {useForm, SubmitHandler} from "react-hook-form";
+import { ErrorMessage } from "@hookform/error-message";
 import './App.css';
 
+interface IFormInput {
+    name: string;
+    email: string;
+    password: string;
+}
+
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    const {register,formState: {errors}, handleSubmit} = useForm<IFormInput>({
+        criteriaMode: "all"
+    });
+    const [data, setData] = useState("");
+
+    return (
+        <form onSubmit={handleSubmit((data) => setData(JSON.stringify(data)))}>
+            <div className="account_entry">
+               <h2>Log in</h2>
+            </div>
+            <label className=""></label>
+            <label>Name</label>
+            <input type={"text"} autoComplete={"text"} {...register("name", {required: "this input is required"})} placeholder="Name"/>
+            <p>{errors.name?.message}</p>
+            <label>Email</label>
+            <input type={"email"} autoComplete={"email"} {...register("email", {required: "this input is required"})} placeholder="Email"/>
+            <label>Password</label>
+            <input type={"password"} autoComplete={"current-password"} {...register("password", {required: "this input is required", minLength:{value:8, message:"This input must exceed 8 characters"}, pattern:{value:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).*$/, message:"Minimum eight characters, at least one uppercase letter, one lowercase letter and one number"}, })} placeholder="Password"/>
+            <p>{data}</p>
+            <ErrorMessage
+            errors={errors}
+            name="password"
+            render={({messages}) => {
+                console.log("messages", messages);
+                return messages
+                    ? Object.entries(messages).map(([type, message]) => (<p key={type}>{message}</p>)) : null;
+            }}/>
+            <input type="submit" value={"Submit"}/>
+        </form>
+    );
 }
 
 export default App;
