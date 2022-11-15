@@ -176,6 +176,7 @@ body {
     align-items: center;
     white-space: normal;
     cursor: pointer;
+    text-decoration: none;
 }
 .account {
     padding-bottom: 15px;

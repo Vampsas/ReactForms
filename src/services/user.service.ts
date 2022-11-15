@@ -1,5 +1,5 @@
-import http from "../src/http-common";
-import IUserData from "../types/user.type";
+import http from "../http-common";
+import IUserData from "../../types/user.type";
 
 class UserDataService {
     getAll(){
